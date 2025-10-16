@@ -1,3 +1,7 @@
+class cell:
+    def __init__(self):
+        self.data = []
+
 #User test function 
 def classify_cell(cell): 
     if cell["color"] == "red": 
