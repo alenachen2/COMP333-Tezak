@@ -8,7 +8,7 @@ def test_classify_cell_red():
 
 def test_classify_notcell():
     cell = {"color": "blue"} 
-    assert classify_cell(cell) == "Cell Not Identified"
+    assert classify_cell(cell) == "Not a Cell"
 
 def test_count_cells():
     cells = [{"color": "red"}, {"color": "blue"}, {"color": "red"}]

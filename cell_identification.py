@@ -13,4 +13,4 @@ def count_cells(cell_list):
             count_cell += 1
         else: 
             count_notcell += 1
-    return{"Cells Identified": count_cell, "Not a Cell": count_notcell}
+    return{"Cells Identified": count_cell, "Cells Not Identified": count_notcell}
