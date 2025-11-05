@@ -28,7 +28,7 @@ def count_cells(cell_list):
 
 #loading image, make it work together with accessing_files.py
 #img = cv2.imread('insert path here')
-img_path = file_retrieval()
+img_path = get_file_path()
 img = cv2.imread(img_path)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
