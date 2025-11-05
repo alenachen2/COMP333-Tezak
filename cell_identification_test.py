@@ -14,3 +14,4 @@ def test_count_cells():
     cells = [{"color": "red"}, {"color": "blue"}, {"color": "red"}]
     result = count_cells(cells)
     assert result == {"Cells Identified": 2, "Cells Not Identified": 1}
+

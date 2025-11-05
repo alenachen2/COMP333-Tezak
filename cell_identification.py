@@ -14,6 +14,7 @@ def classify_cell(cell):
         return "Cell Identified"
     else: 
         return "Not a Cell"
+
 def count_cells(cell_list): 
     count_cell = 0 
     count_notcell = 0
