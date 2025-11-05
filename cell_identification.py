@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+from file_retrieval import get_file_path
+
 class cell:
     def __init__(self):
         self.data = []
@@ -12,7 +14,6 @@ def classify_cell(cell):
         return "Cell Identified"
     else: 
         return "Not a Cell"
-
 def count_cells(cell_list): 
     count_cell = 0 
     count_notcell = 0
@@ -26,7 +27,8 @@ def count_cells(cell_list):
 
 #loading image, make it work together with accessing_files.py
 #img = cv2.imread('insert path here')
-img = cv2.imread('/Users/alenachen/Downloads/images/1.jpg')
+img_path = file_retrieval()
+img = cv2.imread(img_path)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 #blurring to reduce noise
