@@ -11,7 +11,7 @@ def get_file_path():
         print(f"Error: The file '{imagePath}' was not found. Try again.")
         get_file_path()
     except IOError:
-        print(f"Error: Could not open or identify the image file '{image_path}'.")
+        print(f"Error: Could not open or identify the image file '{imagePath}'.")
 
     return imagePath
 
