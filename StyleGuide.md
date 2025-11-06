@@ -1,7 +1,7 @@
 We plan on using Python for our project. 
 
 **Comment Style**
-We will have comments for every function. We will do docstrings inside each function, since we are coding with Python. These will appear after the funtion declaration. The docstrings will mention the inputs of the function and the outputs and what the function does. Our maximum line lnegth for comments is 72 characters. 
+We will have comments for every function. We will do docstrings inside each function, since we are coding with Python. These will appear after the funtion declaration. The docstrings will mention the inputs of the function and the outputs and what the function does. Our maximum line length for comments is 72 characters. 
 
 **Variable and Function Naming Conventions**
 We are going to use snake case to name our variables. Additionally, we will use nouns to name variables and verbs to name functions. We will do our best to use meaningful names, avoiding unncessary comments or explainations. 
