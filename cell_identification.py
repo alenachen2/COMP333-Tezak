@@ -46,9 +46,6 @@ def count_cells(cell_list):
             count_notcell += 1
     return{"Cells Identified": count_cell, "Cells Not Identified": count_notcell}
 
-
-#loading image, make it work together with accessing_files.py
-#img = cv2.imread('insert path here')
 img_path = get_file_path()
 img = cv2.imread(img_path)
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
