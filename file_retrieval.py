@@ -1,7 +1,11 @@
 from PIL import Image 
 
 def get_file_path():
-    """prompts user to copy the desired image's filepath and returns it"""
+    '''
+    Prompts user to copy the desired image's filepath.
+    Returns:
+        str: image path inputted by user
+    '''
     image_path : str 
 
     try:
