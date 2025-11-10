@@ -28,35 +28,62 @@ def count_cells(cell_list):
 
 
 
-#Code with watershed, trying to make work
+#Code with watershed, works badly...
 
-img_path = "/Users/allegracuriel/Downloads/images/23.jpg"
+img_path = "/Users/allegracuriel/Downloads/images/2.jpg"
 img_bgr = cv2.imread(img_path)
 gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
 
-#insert clahe here
 
-denoise = cv2.fastNlMeansDenoising(gray, None, 10, 7, 15)
+#increasing contrast    
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+gray_eq = clahe.apply(gray)
+
+
+denoise = cv2.fastNlMeansDenoising(gray_eq, None, 10, 7, 15)
 #blur1 = cv2.GaussianBlur(denoise, (5,5), 0)
 #blur1 = cv2.medianBlur(denoise, 15)
-blur = cv2.medianBlur(denoise, 21)
+blur = cv2.medianBlur(denoise, 7)
 edges = cv2.Canny(blur, 5, 45)
 
-ret, thresh = cv2.threshold(gray,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+ret, thresh = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
-kernel = np.ones((5,5), np.uint8)
-mask = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+kernel = np.ones((3,3), np.uint8)
+mask = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
 mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
 
+
 dist = cv2.distanceTransform(mask, cv2.DIST_L2, 5)
-_, sure_fg = cv2.threshold(dist, 0.4*dist.max(), 255, cv2.THRESH_BINARY)
+dist_norm = cv2.normalize(dist, None, 0, 1.0, cv2.NORM_MINMAX)
+
+_, sure_fg = cv2.threshold(mask, 0.6*mask.max(), 255, cv2.THRESH_BINARY)
 sure_fg = np.uint8(sure_fg)
 
-plt.imshow(sure_fg, cmap='gray')
+sure_bg = cv2.dilate(mask, kernel, iterations=3)
+unknown = cv2.subtract(sure_bg, sure_fg)
+
+_, markers = cv2.connectedComponents(sure_fg)
+markers = markers + 1
+markers[unknown == 255] = 0
+
+# watershed
+img_color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+markers = cv2.watershed(img_color, markers)
+
+#Mark boundaries in green
+img_color[markers == -1] = [0, 255, 0]
+
+unique_labels = np.unique(markers)
+object_count = len(unique_labels[(unique_labels != -1) & (unique_labels != 0)])
+
+print("Number of objects found:", object_count)
+
+plt.subplot(1,2,1); plt.imshow(thresh,cmap='gray')
+plt.subplot(1,2,2); plt.imshow(img_color)
 plt.show()
 
 
-#THIS SECTION THATS COMMENTED OUT SHOULD WORK
+#this commented out section also works but badly (I think)
 
 """
 
