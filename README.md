@@ -19,6 +19,6 @@ acurielwes - Allegra Curiel
    a. Type 'ls' into the terminal to view a list of the files in our repository.
 8. Copy the image path from our folder, should be 23.jpg
 9. To test cell_identification, open the file, enter the image path in the code under this comment: #Code with watershed, works badly..
-   a. img_path = "/Users/yourusername/Downloads/images/23.jpg"
+   a. img_path = "[path copied from 8]"
 10. Run the program
    
