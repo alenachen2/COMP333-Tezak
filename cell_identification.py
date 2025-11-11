@@ -8,14 +8,35 @@ class cell:
     def __init__(self):
         self.data = []
 
+
 #User test function 
 def classify_cell(cell): 
+    ''' 
+    Determines if input is a cell or not.
+
+    Args: 
+        cell: an object in the cell class
+
+    Returns: 
+        bool: True if arg cell is a cell, false if arg cell is not a cell
+    '''
     if cell["color"] == "red": 
         return "Cell Identified"
     else: 
         return "Not a Cell"
 
+
 def count_cells(cell_list): 
+    ''''
+    Counts the number of cells in a given list.
+
+    Args:
+        cell_list: A list of cell types
+
+    Returns:
+        int: number of successfully counted cells
+        int: number of unsuccessfully counted cells
+    '''
     count_cell = 0 
     count_notcell = 0
     for cell in cell_list: 

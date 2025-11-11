@@ -14,5 +14,6 @@ acurielwes - Allegra Curiel
 4. In the terminal, type: python3 cell_identification_test.py
 5. Install pytest by typing the following: pip3 install pytest
 6. To test our code, type: pytest
+   a. Here is documentation regarding pytest explaining how it works: https://docs.pytest.org/en/stable/
 7. To review our code, open the Python file you would like to look at.
    a. Type 'ls' into the terminal to view a list of the files in our repository.
