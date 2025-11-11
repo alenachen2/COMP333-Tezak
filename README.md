@@ -17,3 +17,8 @@ acurielwes - Allegra Curiel
    a. Here is documentation regarding pytest explaining how it works: https://docs.pytest.org/en/stable/
 7. To review our code, open the Python file you would like to look at.
    a. Type 'ls' into the terminal to view a list of the files in our repository.
+8. Copy the image path from our folder, should be 23.jpg
+9. To test cell_identification, open the file, enter the image path in the code under this comment: #Code with watershed, works badly..
+   a. img_path = "/Users/yourusername/Downloads/images/23.jpg"
+10. Run the program
+   
