@@ -1,62 +1,56 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
-from cellpose import models, io
-
-#from file_retrieval import get_file_path
-"""
-class cell:
-    def __init__(self):
-        self.data = []
-
-
-#User test function 
-def classify_cell(cell): 
-    ''' 
-    Determines if input is a cell or not.
-
-    Args: 
-        cell: an object in the cell class
-
-    Returns: 
-        bool: True if arg cell is a cell, false if arg cell is not a cell
-    '''
-    if cell["color"] == "red": 
-        return "Cell Identified"
-    else: 
-        return "Not a Cell"
-
-
-def count_cells(cell_list): 
-    ''''
-    Counts the number of cells in a given list.
-
-    Args:
-        cell_list: A list of cell types
-
-    Returns:
-        int: number of successfully counted cells
-        int: number of unsuccessfully counted cells
-    '''
-    count_cell = 0 
-    count_notcell = 0
-    for cell in cell_list: 
-        if classify_cell(cell) == "Cell Identified": 
-            count_cell += 1
-        else: 
-            count_notcell += 1
-    return{"Cells Identified": count_cell, "Cells Not Identified": count_notcell}
-"""
-
-
+import cellpose
+from cellpose import models
+from cellpose import io
+from cellpose.io import imread
+from cellpose import plot
 
 #Code with watershed, works badly...
 
-img_path = "/Users/alenachen/Downloads/images/14.jpg"
+img_path = "/Users/alenachen/Downloads/images/21.jpg"
 img_bgr = cv2.imread(img_path)
 gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
 
+#img = io.imread(img_path)
+model = models.Cellpose(gpu=False, model_type='cyto2')
 
+# Run Cellpose segmentation
+# 'diameter' is the approximate cell diameter in pixels. Set to 0 for auto-estimation.
+# 'flow_threshold' and 'cellprob_threshold' are optional parameters for fine-tuning.
+#masks, flows, styles, diams = model.eval(image, diameter=1, channels=channels)
+
+masks, flows, styles, diams = model.eval(
+    gray,
+    diameter=50,    # size in pixels of a cell. check size approx with tezak !!
+    channels=[0,0],   # grayscale
+)
+
+#evening out contrast    
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+gray_eq = clahe.apply(gray)
+
+fig = plt.figure(figsize=(12,5))
+plot.show_segmentation(fig, gray, masks, flows[0], channels=[0,0]) # for black and white photos, use [0,0], for rgb use [2,3]
+fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
+axs[0].imshow(img_bgr)
+axs[0].set_title('First Image')
+
+# Display the second image in the right subplot
+axs[1].imshow(gray, cmap='gray')
+axs[1].set_title('Second Image')
+
+# plt.subplot(1,2,1); 
+# plt.imshow(fig);
+# plt.subplot(1,2,2); 
+# plt.imshow(gray);
+# plt.subplot(1,2,2); 
+# plt.imshow(flows[0]);
+plt.show()
+
+
+'''
 #evening out contrast    
 clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
 gray_eq = clahe.apply(gray)
@@ -96,8 +90,8 @@ markers[unknown == 255] = 0
 img_color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
 markers = cv2.watershed(img_color, markers)
 
-#Mark boundaries in green
-img_color[markers == -1] = [0, 255, 0]
+# #Mark boundaries in green
+#img_color[markers == -1] = [0, 255, 0]
 
 #counting
 unique_labels = np.unique(markers)
@@ -106,5 +100,7 @@ cell_count = len(unique_labels[(unique_labels != -1) & (unique_labels != 0)])
 print("Number of cells found:", cell_count)
 
 plt.subplot(1,2,1); plt.imshow(thresh,cmap='gray')
-plt.subplot(1,2,2); plt.imshow(img_color)
+#plt.subplot(1,2,2); plt.imshow(img_color)
+plt.subplot(1,2,2); plt.imshow(img)
 plt.show()
+'''
