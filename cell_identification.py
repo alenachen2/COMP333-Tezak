@@ -27,7 +27,14 @@ masks, flows, styles = model.eval(
     cellprob_threshold=0.0,   # grayscale
 )
 
+
 #Display results
+
+#Get unique labels in masks which correspond to different ROIs detected
+labels = np.unique(masks)
+
+#print results and subtract 1 to not count background
+print(f"Number of cells detected: {len(labels) - 1}")   
 fig = plt.figure(figsize=(12,5))
 plot.show_segmentation(fig, img, masks, flows[0])
 plt.tight_layout()
