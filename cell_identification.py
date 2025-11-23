@@ -7,14 +7,13 @@ from cellpose import io
 from cellpose.io import imread
 from cellpose import plot
 
-#Code with watershed, works badly...
 
-img_path = "/Users/alenachen/Downloads/images/21.jpg"
+img_path = "/Users/allegracuriel/Downloads/images/10.jpg"
 img_bgr = cv2.imread(img_path)
 gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
 
 #img = io.imread(img_path)
-model = models.Cellpose(gpu=False, model_type='cyto2')
+model = models.CellposeModel(gpu=False)
 
 # Run Cellpose segmentation
 # 'diameter' is the approximate cell diameter in pixels. Set to 0 for auto-estimation.
@@ -23,23 +22,18 @@ model = models.Cellpose(gpu=False, model_type='cyto2')
 
 masks, flows, styles, diams = model.eval(
     gray,
-    diameter=50,    # size in pixels of a cell. check size approx with tezak !!
-    channels=[0,0],   # grayscale
+    flow_threshold=0.4, 
+    cellprob_threshold=0.0,   # grayscale
 )
 
 #evening out contrast    
-clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-gray_eq = clahe.apply(gray)
+#clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+#gray_eq = clahe.apply(gray)
 
 fig = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig, gray, masks, flows[0], channels=[0,0]) # for black and white photos, use [0,0], for rgb use [2,3]
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
-axs[0].imshow(img_bgr)
-axs[0].set_title('First Image')
-
-# Display the second image in the right subplot
-axs[1].imshow(gray, cmap='gray')
-axs[1].set_title('Second Image')
+plot.show_segmentation(fig, img_bgr, masks, flows)
+plt.tight_layout()
+plt.show()
 
 # plt.subplot(1,2,1); 
 # plt.imshow(fig);
@@ -47,7 +41,7 @@ axs[1].set_title('Second Image')
 # plt.imshow(gray);
 # plt.subplot(1,2,2); 
 # plt.imshow(flows[0]);
-plt.show()
+#plt.show()
 
 
 '''
