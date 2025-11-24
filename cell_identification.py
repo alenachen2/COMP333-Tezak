@@ -65,9 +65,16 @@ def normalize(image):
 
 imgs_clean_array = clean(b, g, r)
 
+
 with yaspin(text="Identifying cells...", color="yellow") as spinner:
-    #Create Cellpose model
-    model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
+    def create_model():
+        '''
+        Create a Cellpose model.
+        Output:
+            model: model using Cellpose's pretrained model, cpsam
+        '''
+        model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
+        return model
 
     #Segment image
     masks, flows, styles = model.eval(
