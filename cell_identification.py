@@ -35,10 +35,13 @@ def clean(r, g, b):
     '''
     red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
     red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
+    
     blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
     blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
+    
     green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
     green_clean = np.clip(green_clean, 0, 255).astype(np.uint8)
+    
     return [normalize(red_clean), normalize(green_clean), normalize(blue_clean)]
 
 
@@ -79,7 +82,6 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
         '''
         masks, flows, styles = model.eval(
             image_array,
-            channels=[[0,0], [0,0], [0,0]],
             flow_threshold=0.3,
             cellprob_threshold=2.5,
         )
@@ -115,7 +117,6 @@ def display_results(img_array, masks_array, flows_array):
         ax.set_title(color_labels[i] + " Channel Segmentation")
         plt.tight_layout()
         plt.show()
-
 
 
 # #uisng for easy testing for now.
