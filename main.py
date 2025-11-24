@@ -10,9 +10,7 @@ from cell_identification import extract_ROI
 from cell_identification import display_results
 
 if __name__ == "__main__":
-#uisng for easy testing for now.
-    img_path = "/Users/alenachen/Downloads/images/9.jpg"
-#img_path = get_file_path()
+    img_path = get_file_path()
     img = cv2.imread(img_path).copy()
 
     b, g, r = split_channels(img)
