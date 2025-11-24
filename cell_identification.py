@@ -30,63 +30,40 @@ def split_channels(image):
 
 b, g, r = split_channels(img)
 
-def clean(col, b, g, r):
+def clean(b, g, r):
     '''
     Cleans up an image with an individual channel by suppressing the colors from the remaining
     two channels. For instance, cleaning up a red channel involves suppressing the blue and green
     bleed that may be leftover in the image.
     Input: 
-        col: the color of the channel that needs to be cleaned.
         b: image with only the blue channel
         g: image with only the green channel
         r: image with only the red channel
-    Output: the clean version of input the specified color channel. 
-        If col == 'red', the output is the clean version of r. 
-        If col == 'blue', the output is the clean version of b. 
-        If col == 'green', the output is the clean version of g.  
+    Output: a list of the clean and normalized red, green, and blue channels
     '''
-    if col == 'red':
-        red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
-        red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
-        return red_clean
-    if col == 'blue':
-        blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
-        blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
-        return blue_clean
-    if col == 'green':
-        green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
-        green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
-        return green_clean    
+    red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
+    red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
+    
+    blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
+    blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
+    
+    green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
+    green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
 
-red_clean = clean('red', b, g,r)
-blue_clean = clean('blue', b, g,r)
-green_clean = clean('green', b, g,r)
+    return [normalize(red_clean), normalize(green_clean), normalize(blue_clean)]
 
-"""
-# --- RED CLEANING ---
-# suppress blue/green bleed
-red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
-red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
 
-# normalize contrast
-red_clean = cv2.normalize(red_clean, None, 0, 255, cv2.NORM_MINMAX)
+def normalize(image):
+    '''
+    Normalizes the contrast in the image.
+    Input:
+        image: an image
+    Output:
+        normalized image 
+    '''
+    return cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
 
-# --- BLUE CLEANING ---
-# suppress red/green bleed
-blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
-blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
-
-# normalize contrast
-blue_clean = cv2.normalize(blue_clean, None, 0, 255, cv2.NORM_MINMAX)
-
-# --- GREEN CLEANING ---
-# suppress red/blue bleed
-green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
-green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
-"""
-
-#Put into list for cellpose
-imgs_clean_split = [red_clean, green_clean, blue_clean]
+imgs_clean_array = clean(b, g, r)
 
 with yaspin(text="Identifying cells...", color="yellow") as spinner:
     #Create Cellpose model
@@ -94,7 +71,7 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
 
     #Segment image
     masks, flows, styles = model.eval(
-        imgs_clean_split,
+        imgs_clean_array,
         channels=[0,0],
         flow_threshold=0.3,
         cellprob_threshold=2.5,
@@ -114,18 +91,18 @@ print(f"Red cells detected: {len(red_ROIs) - 1}"
 
 #display results - - to be changed
 fig0 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig0, red_clean, masks[0], flows[0][0])
+plot.show_segmentation(fig0, imgs_clean_array[0], masks[0], flows[0][0])
 plt.tight_layout()
 plt.show()
 
 #display results - - to be changed
 fig1 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig1, green_clean, masks[1], flows[1][0])
+plot.show_segmentation(fig1, imgs_clean_array[1], masks[1], flows[1][0])
 plt.tight_layout()
 plt.show()
 
 #display results - - to be changed
 fig2 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig2, blue_clean, masks[2], flows[2][0])
+plot.show_segmentation(fig2, imgs_clean_array[2], masks[2], flows[2][0])
 plt.tight_layout()
 plt.show()
