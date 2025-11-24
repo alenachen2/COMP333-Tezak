@@ -77,13 +77,16 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
         return model
 
     #Segment image
-    masks, flows, styles = model.eval(
-        imgs_clean_array,
-        channels=[0,0],
-        flow_threshold=0.3,
-        cellprob_threshold=2.5,
-    )
-
+    def segment(model):
+        masks, flows, styles = model.eval(
+            imgs_clean_array,
+            channels=[0,0],
+            flow_threshold=0.3,
+            cellprob_threshold=2.5,
+        )
+        return masks, flows, styles
+    
+    masks, flows, styles = segment(create_model())
 #Display results
 
 #Get unique labels in masks which correspond to different ROIs detected
