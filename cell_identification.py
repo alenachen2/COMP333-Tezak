@@ -18,9 +18,9 @@ img = img_bgr.copy()
 
 def split_channels(image):
     '''
-    Separating the image channels into blue, green, and red components.
+    Separates the image into blue, green, and red channels.
     Input: an image
-    Returns: 
+    Output: 
         b: image with only the blue channel
         g: image with only the green channel
         r: image with only the red channel
@@ -30,8 +30,39 @@ def split_channels(image):
 
 b, g, r = split_channels(img)
 
-#def clean(color, channel):
+def clean(col, b, g, r):
+    '''
+    Cleans up an image with an individual channel by suppressing the colors from the remaining
+    two channels. For instance, cleaning up a red channel involves suppressing the blue and green
+    bleed that may be leftover in the image.
+    Input: 
+        col: the color of the channel that needs to be cleaned.
+        b: image with only the blue channel
+        g: image with only the green channel
+        r: image with only the red channel
+    Output: the clean version of input the specified color channel. 
+        If col == 'red', the output is the clean version of r. 
+        If col == 'blue', the output is the clean version of b. 
+        If col == 'green', the output is the clean version of g.  
+    '''
+    if col == 'red':
+        red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
+        red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
+        return red_clean
+    if col == 'blue':
+        blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
+        blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
+        return blue_clean
+    if col == 'green':
+        green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
+        green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
+        return green_clean    
 
+red_clean = clean('red', b, g,r)
+blue_clean = clean('blue', b, g,r)
+green_clean = clean('green', b, g,r)
+
+"""
 # --- RED CLEANING ---
 # suppress blue/green bleed
 red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
@@ -52,6 +83,7 @@ blue_clean = cv2.normalize(blue_clean, None, 0, 255, cv2.NORM_MINMAX)
 # suppress red/blue bleed
 green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
 green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
+"""
 
 #Put into list for cellpose
 imgs_clean_split = [red_clean, green_clean, blue_clean]
