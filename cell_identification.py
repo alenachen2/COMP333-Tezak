@@ -12,13 +12,25 @@ from file_retrieval import get_file_path
 #Retrieve image path
 img_path = get_file_path()
 
-
 #Read image
 img_bgr = cv2.imread(img_path)
 img = img_bgr.copy()
 
-# --- split channels ---
-b, g, r = cv2.split(img)
+def split_channels(image):
+    '''
+    Separating the image channels into blue, green, and red components.
+    Input: an image
+    Returns: 
+        b: image with only the blue channel
+        g: image with only the green channel
+        r: image with only the red channel
+    '''
+    b, g, r = cv2.split(image)
+    return b, g, r
+
+b, g, r = split_channels(img)
+
+#def clean(color, channel):
 
 # --- RED CLEANING ---
 # suppress blue/green bleed
@@ -51,7 +63,8 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
     #Segment image
     masks, flows, styles = model.eval(
         imgs_clean_split,
-        flow_threshold=0.3, 
+        channels=[0,0],
+        flow_threshold=0.3,
         cellprob_threshold=2.5,
     )
 
