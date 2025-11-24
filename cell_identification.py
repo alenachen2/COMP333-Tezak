@@ -16,6 +16,7 @@ img_path = get_file_path()
 img_bgr = cv2.imread(img_path)
 img = img_bgr.copy()
 
+
 def split_channels(image):
     '''
     Separates the image into blue, green, and red channels.
@@ -28,9 +29,11 @@ def split_channels(image):
     b, g, r = cv2.split(image)
     return b, g, r
 
+
 b, g, r = split_channels(img)
 
-def clean(b, g, r):
+
+def clean(r, g, b):
     '''
     Cleans up an image with an individual channel by suppressing the colors from the remaining
     two channels. For instance, cleaning up a red channel involves suppressing the blue and green
@@ -63,7 +66,8 @@ def normalize(image):
     '''
     return cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
 
-imgs_clean_array = clean(b, g, r)
+
+imgs_clean_array = clean(r, g, b)
 
 
 with yaspin(text="Identifying cells...", color="yellow") as spinner:
@@ -76,43 +80,57 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
         model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
         return model
 
-    #Segment image
+
     def segment(model):
         masks, flows, styles = model.eval(
             imgs_clean_array,
-            channels=[0,0],
+            channels=[[0,0], [0,0], [0,0]],
             flow_threshold=0.3,
             cellprob_threshold=2.5,
         )
         return masks, flows, styles
     
     masks, flows, styles = segment(create_model())
-#Display results
 
-#Get unique labels in masks which correspond to different ROIs detected
-red_ROIs = np.unique(masks[0])
-green_ROIs = np.unique(masks[1])
-blue_ROIs = np.unique(masks[2])
+
+def extract_ROI(col, masks):
+    '''
+    Get unique labels from masks, corresponding to different regions of interest (ROI) detected
+    Input:
+        col: a string, either 'red', 'green', or 'blue' indicating the color channel we want to 
+            focus on
+    Output: labels in the mask where each label represents a different cell ROI
+    '''
+    if col == 'red':
+        return np.unique(masks[0])
+    if col == 'green':
+        return np.unique(masks[1])
+    if col == 'blue':
+        return np.unique(masks[2])
+    
+
+red_ROIs = extract_ROI('red', masks)
+green_ROIs = extract_ROI('green', masks)
+blue_ROIs = extract_ROI('blue', masks)
 
 #print results and subtract 1 to not count background
 print(f"Red cells detected: {len(red_ROIs) - 1}"   
     f"\nGreen cells detected: {len(green_ROIs) - 1}"   
     f"\nBlue of cells detected: {len(blue_ROIs) - 1}")   
 
-#display results - - to be changed
-fig0 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig0, imgs_clean_array[0], masks[0], flows[0][0])
-plt.tight_layout()
-plt.show()
 
-#display results - - to be changed
-fig1 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig1, imgs_clean_array[1], masks[1], flows[1][0])
-plt.tight_layout()
-plt.show()
+def display_results():
+    '''
+    Displays the image with pre-processing changes and detected cells.
+    The display interface is still in the works. 
+    '''
+    for i in range(3):
+        color_labels = ['Red', 'Green', 'Blue']
+        fig = plt.figure(figsize=(12,5))
+        plot.show_segmentation(fig, imgs_clean_array[i], masks[i], flows[i][0])
+        ax = plt.gca()                    
+        ax.set_title(color_labels[i] + " Channel Segmentation")
+        plt.tight_layout()
+        plt.show()
 
-#display results - - to be changed
-fig2 = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig2, imgs_clean_array[2], masks[2], flows[2][0])
-plt.tight_layout()
-plt.show()
+display_results()
