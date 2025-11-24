@@ -120,7 +120,7 @@ def display_results(img_array, masks_array, flows_array):
 
 
 #uisng for easy testing for now.
-img_path = "/Users/alenachen/Downloads/images/2.jpg"
+img_path = "/Users/alenachen/Downloads/images/9.jpg"
 #img_path = get_file_path()
 img = cv2.imread(img_path).copy()
 
@@ -128,7 +128,8 @@ b, g, r = split_channels(img)
 imgs_clean_array = clean(r, g, b)
 
 with yaspin(text="Identifying cells...", color="yellow") as spinner:
-    masks, flows, styles = segment(create_model(), imgs_clean_array)
+    model = create_model()
+    masks, flows, styles = segment(model, imgs_clean_array)
 
 red_ROIs = extract_ROI('red', masks)
 green_ROIs = extract_ROI('green', masks)
