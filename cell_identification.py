@@ -4,103 +4,139 @@ import matplotlib.pyplot as plt
 import cellpose
 from cellpose import models
 from cellpose import io
-from cellpose.io import imread
 from cellpose import plot
-
-#Code with watershed, works badly...
-
-img_path = "/Users/alenachen/Downloads/images/21.jpg"
-img_bgr = cv2.imread(img_path)
-gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-
-#img = io.imread(img_path)
-model = models.Cellpose(gpu=False, model_type='cyto2')
-
-# Run Cellpose segmentation
-# 'diameter' is the approximate cell diameter in pixels. Set to 0 for auto-estimation.
-# 'flow_threshold' and 'cellprob_threshold' are optional parameters for fine-tuning.
-#masks, flows, styles, diams = model.eval(image, diameter=1, channels=channels)
-
-masks, flows, styles, diams = model.eval(
-    gray,
-    diameter=50,    # size in pixels of a cell. check size approx with tezak !!
-    channels=[0,0],   # grayscale
-)
-
-#evening out contrast    
-clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-gray_eq = clahe.apply(gray)
-
-fig = plt.figure(figsize=(12,5))
-plot.show_segmentation(fig, gray, masks, flows[0], channels=[0,0]) # for black and white photos, use [0,0], for rgb use [2,3]
-fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(10, 5))
-axs[0].imshow(img_bgr)
-axs[0].set_title('First Image')
-
-# Display the second image in the right subplot
-axs[1].imshow(gray, cmap='gray')
-axs[1].set_title('Second Image')
-
-# plt.subplot(1,2,1); 
-# plt.imshow(fig);
-# plt.subplot(1,2,2); 
-# plt.imshow(gray);
-# plt.subplot(1,2,2); 
-# plt.imshow(flows[0]);
-plt.show()
+from yaspin import yaspin
+from yaspin.spinners import Spinners
 
 
-'''
-#evening out contrast    
-clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-gray_eq = clahe.apply(gray)
+def split_channels(image):
+    '''
+    Separates the image into blue, green, and red channels.
+    Input: an image
+    Output: 
+        b: image with only the blue channel
+        g: image with only the green channel
+        r: image with only the red channel
+    '''
+    b, g, r = cv2.split(image)
+    return b, g, r
 
-#denoising + blur
-denoise = cv2.fastNlMeansDenoising(gray_eq, None, 10, 7, 15)
-blur = cv2.medianBlur(denoise, 7)
 
-#edge detection
-edges = cv2.Canny(blur, 5, 45)
+def clean(r, g, b):
+    '''
+    Cleans up an image with an individual channel by suppressing the colors from the remaining
+    two channels. For instance, cleaning up a red channel involves suppressing the blue and green
+    bleed that may be leftover in the image.
+    Input: 
+        b: image with only the blue channel
+        g: image with only the green channel
+        r: image with only the red channel
+    Output: a list of the clean and normalized red, green, and blue channels
+    '''
+    red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
+    red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
+    
+    blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
+    blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
+    
+    green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
+    green_clean = np.clip(green_clean, 0, 255).astype(np.uint8)
+    
+    return [normalize(red_clean), normalize(green_clean), normalize(blue_clean)]
 
-#making b&w background and foreground
-ret, thresh = cv2.threshold(gray,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
 
-#cleaning
-kernel = np.ones((3,3), np.uint8)
-mask = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
-mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+def normalize(image):
+    '''
+    Normalizes the contrast in the image.
+    Input:
+        image: an image
+    Output:
+        normalized image 
+    '''
+    return cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
 
-#separation of cells
-dist = cv2.distanceTransform(mask, cv2.DIST_L2, 5)
-dist_norm = cv2.normalize(dist, None, 0, 1.0, cv2.NORM_MINMAX)
 
-#threshold again with new info
-_, sure_fg = cv2.threshold(mask, 0.6*mask.max(), 255, cv2.THRESH_BINARY)
-sure_fg = np.uint8(sure_fg)
+with yaspin(text="Identifying cells...", color="yellow") as spinner:
+    def create_model():
+        '''
+        Create a Cellpose model.
+        Output:
+            model: model using Cellpose's pretrained model, cpsam
+        '''
+        model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
+        return model
 
-sure_bg = cv2.dilate(mask, kernel, iterations=3)
-unknown = cv2.subtract(sure_bg, sure_fg)
 
-#markers for watershed
-_, markers = cv2.connectedComponents(sure_fg)
-markers = markers + 1
-markers[unknown == 255] = 0
+    def segment(model, image_array):
+        '''
+        Segments image.
+        Input: 
+            model: the Cellpose model that is being used to perform segmentation. 
+            image_array: an array of three images, the red, green, and blue channels, 
+                for segmentation 
+        Ouput:
+            masks: a list of arrays where each array corresponds to each image. 
+                Each array holds the labels corresponding to each ROI. 
+            flows: a list of flow fields used by the model to segment each image
+            styles: a list containing visual properties of each image. 
+        '''
+        masks, flows, styles = model.eval(
+            image_array,
+            flow_threshold=0.3,
+            cellprob_threshold=2.5,
+        )
+        return masks, flows, styles
 
-# watershed
-img_color = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
-markers = cv2.watershed(img_color, markers)
 
-# #Mark boundaries in green
-#img_color[markers == -1] = [0, 255, 0]
+def extract_ROI(col, masks):
+    '''
+    Get unique labels from masks, corresponding to different regions of interest (ROI) detected
+    Input:
+        col: a string, either 'red', 'green', or 'blue' indicating the color channel we want to 
+            focus on
+    Output: labels in the mask where each label represents a different cell ROI
+    '''
+    if col == 'red':
+        return np.unique(masks[0])
+    if col == 'green':
+        return np.unique(masks[1])
+    if col == 'blue':
+        return np.unique(masks[2])  
 
-#counting
-unique_labels = np.unique(markers)
-cell_count = len(unique_labels[(unique_labels != -1) & (unique_labels != 0)])
 
-print("Number of cells found:", cell_count)
+def display_results(img_array, masks_array, flows_array):
+    '''
+    Displays the image with pre-processing changes and detected cells.
+    The display interface is still in the works. 
+    '''
+    for i in range(3):
+        color_labels = ['Red', 'Green', 'Blue']
+        fig = plt.figure(figsize=(12,5))
+        plot.show_segmentation(fig, img_array[i], masks_array[i], flows_array[i][0])
+        ax = plt.gca()                    
+        ax.set_title(color_labels[i] + " Channel Segmentation")
+        plt.tight_layout()
+        plt.show()
 
-plt.subplot(1,2,1); plt.imshow(thresh,cmap='gray')
-#plt.subplot(1,2,2); plt.imshow(img_color)
-plt.subplot(1,2,2); plt.imshow(img)
-plt.show()
-'''
+
+# #uisng for easy testing for now.
+# img_path = "/Users/alenachen/Downloads/images/9.jpg"
+# #img_path = get_file_path()
+# img = cv2.imread(img_path).copy()
+
+# b, g, r = split_channels(img)
+# imgs_clean_array = clean(r, g, b)
+
+# with yaspin(text="Identifying cells...", color="yellow") as spinner:
+#     model = create_model()
+#     masks, flows, styles = segment(model, imgs_clean_array)
+
+# red_ROIs = extract_ROI('red', masks)
+# green_ROIs = extract_ROI('green', masks)
+# blue_ROIs = extract_ROI('blue', masks)
+
+# print(f"Red cells detected: {len(red_ROIs) - 1}"   
+#     f"\nGreen cells detected: {len(green_ROIs) - 1}"   
+#     f"\nBlue of cells detected: {len(blue_ROIs) - 1}") 
+
+# display_results(imgs_clean_array, masks, flows)
