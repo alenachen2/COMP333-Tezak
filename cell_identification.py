@@ -9,13 +9,6 @@ from yaspin import yaspin
 from yaspin.spinners import Spinners
 from file_retrieval import get_file_path
 
-#Retrieve image path
-img_path = get_file_path()
-
-#Read image
-img_bgr = cv2.imread(img_path)
-img = img_bgr.copy()
-
 
 def split_channels(image):
     '''
@@ -28,9 +21,6 @@ def split_channels(image):
     '''
     b, g, r = cv2.split(image)
     return b, g, r
-
-
-b, g, r = split_channels(img)
 
 
 def clean(r, g, b):
@@ -46,13 +36,10 @@ def clean(r, g, b):
     '''
     red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
     red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
-    
     blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
     blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
-    
     green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
-    green_clean = np.clip(green_clean, 0, 255).astype(np.uint8) 
-
+    green_clean = np.clip(green_clean, 0, 255).astype(np.uint8)
     return [normalize(red_clean), normalize(green_clean), normalize(blue_clean)]
 
 
@@ -67,9 +54,6 @@ def normalize(image):
     return cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
 
 
-imgs_clean_array = clean(r, g, b)
-
-
 with yaspin(text="Identifying cells...", color="yellow") as spinner:
     def create_model():
         '''
@@ -81,16 +65,26 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
         return model
 
 
-    def segment(model):
+    def segment(model, image_array):
+        '''
+        Segments image.
+        Input: 
+            model: the Cellpose model that is being used to perform segmentation. 
+            image_array: an array of three images, the red, green, and blue channels, 
+                for segmentation 
+        Ouput:
+            masks: a list of arrays where each array corresponds to each image. 
+                Each array holds the labels corresponding to each ROI. 
+            flows: a list of flow fields used by the model to segment each image
+            styles: a list containing visual properties of each image. 
+        '''
         masks, flows, styles = model.eval(
-            imgs_clean_array,
+            image_array,
             channels=[[0,0], [0,0], [0,0]],
             flow_threshold=0.3,
             cellprob_threshold=2.5,
         )
         return masks, flows, styles
-    
-    masks, flows, styles = segment(create_model())
 
 
 def extract_ROI(col, masks):
@@ -106,20 +100,10 @@ def extract_ROI(col, masks):
     if col == 'green':
         return np.unique(masks[1])
     if col == 'blue':
-        return np.unique(masks[2])
-    
-
-red_ROIs = extract_ROI('red', masks)
-green_ROIs = extract_ROI('green', masks)
-blue_ROIs = extract_ROI('blue', masks)
-
-#print results and subtract 1 to not count background
-print(f"Red cells detected: {len(red_ROIs) - 1}"   
-    f"\nGreen cells detected: {len(green_ROIs) - 1}"   
-    f"\nBlue of cells detected: {len(blue_ROIs) - 1}")   
+        return np.unique(masks[2])  
 
 
-def display_results():
+def display_results(img_array, masks_array, flows_array):
     '''
     Displays the image with pre-processing changes and detected cells.
     The display interface is still in the works. 
@@ -127,10 +111,31 @@ def display_results():
     for i in range(3):
         color_labels = ['Red', 'Green', 'Blue']
         fig = plt.figure(figsize=(12,5))
-        plot.show_segmentation(fig, imgs_clean_array[i], masks[i], flows[i][0])
+        plot.show_segmentation(fig, img_array[i], masks_array[i], flows_array[i][0])
         ax = plt.gca()                    
         ax.set_title(color_labels[i] + " Channel Segmentation")
         plt.tight_layout()
         plt.show()
 
-display_results()
+
+
+#uisng for easy testing for now.
+img_path = "/Users/alenachen/Downloads/images/2.jpg"
+#img_path = get_file_path()
+img = cv2.imread(img_path).copy()
+
+b, g, r = split_channels(img)
+imgs_clean_array = clean(r, g, b)
+
+with yaspin(text="Identifying cells...", color="yellow") as spinner:
+    masks, flows, styles = segment(create_model(), imgs_clean_array)
+
+red_ROIs = extract_ROI('red', masks)
+green_ROIs = extract_ROI('green', masks)
+blue_ROIs = extract_ROI('blue', masks)
+
+print(f"Red cells detected: {len(red_ROIs) - 1}"   
+    f"\nGreen cells detected: {len(green_ROIs) - 1}"   
+    f"\nBlue of cells detected: {len(blue_ROIs) - 1}") 
+
+display_results(imgs_clean_array, masks, flows)
