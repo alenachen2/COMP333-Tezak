@@ -1,13 +1,14 @@
 # Tezak Lab - Cell Counter
 
-##Contributors:
+## Contributors:
 alenachen2 - Alena Chen
 schalla1201 - Saakshi Challa
 acurielwes - Allegra Curiel
 
-**Style Guide**: https://github.com/alenachen2/COMP333-Tezak/blob/1e1ebc1eb064cbe47c49140c17cb7d6f46f0f8f3/StyleGuide.md
+## Style Guide 
+https://github.com/alenachen2/COMP333-Tezak/blob/1e1ebc1eb064cbe47c49140c17cb7d6f46f0f8f3/StyleGuide.md
 
-**User Instructions**
+## User Instructions
 1. Download Python version 3.11.x if it is not already downloaded by following the instructions from this link: https://www.python.org/downloads/. To check your Python version, type 'python --version' into the terminal. 
 2. Clone our Github repository
    a. Open Terminal on your laptop and type: git clone https://github.com/alenachen2/COMP333-Tezak.git
