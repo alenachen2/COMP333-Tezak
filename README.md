@@ -14,7 +14,7 @@ acurielwes - Allegra Curiel
 3. Install Required Python Packages
    a. pip3 install opencv-python yaspin cellpose numpy matplotlib pytest
 5. Inside our repository locate the test image and copy its full file path.
-   a. Enter this file path into main.py in the code under if __name__ ==         "__main__"
+   a. Enter this file path into main.py in the code under if __name__ == "__main__"
          i. img_path = "[path copied]"
 7. Run the file! 
 8. To test our code, type: pytest
