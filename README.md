@@ -14,7 +14,7 @@ https://github.com/alenachen2/COMP333-Tezak/blob/1e1ebc1eb064cbe47c49140c17cb7d6
    - Open Terminal on your laptop and type: git clone https://github.com/alenachen2/COMP333-Tezak.git  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
 3. Create a virtual environment for this project.   
-   - Type ```python3 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
+   - Type ```python3.11 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
    - To activate the virtual environment on macOS/Linux, type ```source cellpose_env/bin/activate```. If you are using Windows, type ```cellpose_env\Scripts\activate```  
 4. Install required Python Packages.  
    - In the terminal, type ```pip3 install opencv-python yaspin 'cellpose[gui] == 4.0.7' numpy matplotlib pytest```  
