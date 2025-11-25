@@ -8,6 +8,7 @@ from cell_identification import create_model
 from cell_identification import segment
 from cell_identification import extract_ROI
 from cell_identification import display_results
+from cell_counting import count
 
 if __name__ == "__main__":
     img_path = get_file_path()
@@ -24,8 +25,8 @@ if __name__ == "__main__":
     green_ROIs = extract_ROI('green', masks)
     blue_ROIs = extract_ROI('blue', masks)
 
-    print(f"Red cells detected: {len(red_ROIs) - 1}"   
-        f"\nGreen cells detected: {len(green_ROIs) - 1}"   
-        f"\nBlue of cells detected: {len(blue_ROIs) - 1}") 
+    print("Red cells detected: " + str(count(red_ROIs)))
+    print("Green cells detected: " + str(count(green_ROIs)))
+    print("Blue cells detected: " + str(count(blue_ROIs)))
 
     display_results(imgs_clean_array, masks, flows)
