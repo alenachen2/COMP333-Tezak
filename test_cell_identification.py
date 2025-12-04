@@ -1,6 +1,8 @@
 import numpy as np
-from cell_identification import split_channels, clean, normalize, extract_ROI
-
+from cell_identification import split_channels
+from cell_identification import clean
+from cell_identification import normalize
+from cell_identification import extract_ROI
 
 def test_split_channels():
     """
