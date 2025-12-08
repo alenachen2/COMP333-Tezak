@@ -14,6 +14,8 @@ if __name__ == "__main__":
     img_path = get_file_path()
     img = cv2.imread(img_path).copy()
 
+    print("Processing image...")
+    
     b, g, r = split_channels(img)
     imgs_clean_array = clean(r, g, b)
 
@@ -21,6 +23,7 @@ if __name__ == "__main__":
         model = create_model()
         masks, flows, styles = segment(model, imgs_clean_array)
 
+    print("Cell segmentation complete. Extracting color ROIs...")
     red_ROIs = extract_ROI('red', masks)
     green_ROIs = extract_ROI('green', masks)
     blue_ROIs = extract_ROI('blue', masks)
