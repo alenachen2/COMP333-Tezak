@@ -82,7 +82,7 @@ def segment(model, image_array):
     '''
     masks, flows, styles = model.eval(
         image_array,
-        flow_threshold=0.3,
+        flow_threshold=0.4,
         cellprob_threshold=2.5,
     )
     return masks, flows, styles
