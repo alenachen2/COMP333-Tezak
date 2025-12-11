@@ -94,25 +94,25 @@ def create_model():
     return model
 
 
-    def segment(model, image_array):
-        '''
-        Segments image.
-        Input: 
-            model: the Cellpose model that is being used to perform segmentation. 
-            image_array: an array of three images, the red, green, and blue channels, 
-                for segmentation 
-        Ouput:
-            masks: a list of arrays where each array corresponds to each image. 
-                Each array holds the labels corresponding to each ROI. 
-            flows: a list of flow fields used by the model to segment each image
-            styles: a list containing visual properties of each image. 
-        '''
-        masks, flows, styles = model.eval(
-            image_array,
-            flow_threshold=0.4,
-            cellprob_threshold=0.0,
-        )
-        return masks, flows, styles
+def segment(model, image_array):
+    '''
+    Segments image.
+    Input: 
+        model: the Cellpose model that is being used to perform segmentation. 
+        image_array: an array of three images, the red, green, and blue channels, 
+            for segmentation 
+    Ouput:
+        masks: a list of arrays where each array corresponds to each image. 
+            Each array holds the labels corresponding to each ROI. 
+        flows: a list of flow fields used by the model to segment each image
+        styles: a list containing visual properties of each image. 
+    '''
+    masks, flows, styles = model.eval(
+        image_array,
+        flow_threshold=0.4,
+        cellprob_threshold=0.0,
+    )
+    return masks, flows, styles
 
 
 def extract_ROI(col, masks):
@@ -136,11 +136,9 @@ def display_results(img_array, masks_array, flows_array):
     Displays the image with pre-processing changes and detected cells.
     The display interface is still in the works. 
     '''
-    for i in range(3):
-        color_labels = ['Red', 'Green', 'Blue']
-        fig = plt.figure(figsize=(12,5))
-        plot.show_segmentation(fig, img_array[i], masks_array[i], flows_array[i][0])
-        ax = plt.gca()                    
-        ax.set_title(color_labels[i] + " Channel Segmentation")
-        plt.tight_layout()
-        plt.show()
+    fig = plt.figure(figsize=(12,5))
+    plot.show_segmentation(fig, img_array, masks_array, flows_array[0])
+    ax = plt.gca()                    
+    ax.set_title("Detected Total Cells")
+    plt.tight_layout()
+    plt.show()

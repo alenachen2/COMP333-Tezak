@@ -6,6 +6,7 @@ from cell_identification import split_channels
 from cell_identification import clean
 from cell_identification import create_model
 from cell_identification import classify_cells_by_color
+from cell_identification import display_results
 from cell_counting import count
 import numpy as np
 
@@ -37,4 +38,5 @@ if __name__ == "__main__":
     print("Red cells detected: " + str(all_counts["red"]))
     print("Green cells detected: " + str(all_counts["green"]))
     print("Blue cells detected: " + str(all_counts["blue"]))
+    display_results(img, masks, flows)
    
