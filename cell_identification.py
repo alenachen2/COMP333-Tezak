@@ -8,6 +8,30 @@ from cellpose import plot
 from yaspin import yaspin
 from yaspin.spinners import Spinners
 
+def classify_cells_by_color(img, masks):
+    '''
+    Classify already segmented cells based on color.
+    Input:
+        img: an image
+        masks: a 2D array of size [height, width] containing cell labels.
+    Output: a dictonary where the key is the amount of each color cell detected
+    '''
+    counts = {"red": 0, "green": 0, "blue": 0}
+
+    for label in range(1, masks.max() + 1):
+        cell_pixels = img[masks == label]
+
+        mean_r = cell_pixels[:, 0].mean()
+        mean_g = cell_pixels[:, 1].mean()
+        mean_b = cell_pixels[:, 2].mean()
+
+        if mean_r > mean_g and mean_r > mean_b:
+            counts["red"] += 1
+        elif mean_g > mean_r and mean_g > mean_b:
+            counts["green"] += 1
+        else:
+            counts["blue"] += 1
+    return counts
 
 def split_channels(image):
     '''
@@ -82,8 +106,8 @@ with yaspin(text="Identifying cells...", color="yellow") as spinner:
         '''
         masks, flows, styles = model.eval(
             image_array,
-            flow_threshold=0.3,
-            cellprob_threshold=2.5,
+            flow_threshold=0.4,
+            cellprob_threshold=0.0,
         )
         return masks, flows, styles
 
