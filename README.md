@@ -25,7 +25,7 @@ acurielwes - Allegra Curiel
 6. To run our test code, type: ```pytest```. 
    - If you are unfamilar with pytest, here is documentation explaining how it works: https://docs.pytest.org/en/stable/.
 
-##IF YOU WANT TO USE THE USER INTERFACE (work in progress)  
+## IF YOU WANT TO USE THE USER INTERFACE (work in progress)  
 1. After step 4, type python user_interface.py in terminal  
 2. Then type streamlit run user_interface.py in terminal  
 3. The local host website should pop up for you! Please follow the instructionson the website.  
