@@ -6,8 +6,7 @@ from cell_identification import (
     split_channels,
     clean,
     create_model,
-    segment,
-    extract_ROI,
+    classify_cells_by_color
 )
 from cell_counting import count
 
@@ -24,39 +23,58 @@ if uploaded:
 
     if st.button("Run Cell Counting"):
         with st.spinner("Identifying cells..."):
+             b, g, r = split_channels(img)
 
-            # 1. Split into color channels using your backend
-            #    split_channels is defined in cell_identification.py
-            b, g, r = split_channels(img)
+        model = create_model()
 
-            # 2. Clean / preprocess channels using your backend
-            #    clean is defined in cell_identification.py
-            imgs_clean_array = clean(r, g, b)
+        masks, flows, styles = model.eval(
+            img,
+            flow_threshold=0.4,
+            cellprob_threshold=0.0,
+            normalize = True, 
+            diameter = None
+        )
 
-            # 3. Create Cellpose model using your backend
-            #    create_model is defined in cell_identification.py
-            model = create_model()
+        all_counts = classify_cells_by_color(img, masks)
 
-            # 4. Run segmentation using your backend
-            #    segment is defined in cell_identification.py
-            masks, flows, styles = segment(model, imgs_clean_array)
+            # # 1. Split into color channels using your backend
+            # #    split_channels is defined in cell_identification.py
+            # b, g, r = split_channels(img)
 
-            # 5. Extract ROIs for each color channel using your backend
-            #    extract_ROI is defined in cell_identification.py
-            red_ROIs = extract_ROI('red', masks)
-            green_ROIs = extract_ROI('green', masks)
-            blue_ROIs = extract_ROI('blue', masks)
+            # # 2. Clean / preprocess channels using your backend
+            # #    clean is defined in cell_identification.py
+            # imgs_clean_array = clean(r, g, b)
 
-            # 6. Count cells using your backend
-            #    count is defined in cell_counting.py
-            red_count = count(red_ROIs)
-            green_count = count(green_ROIs)
-            blue_count = count(blue_ROIs)
+            # # 3. Create Cellpose model using your backend
+            # #    create_model is defined in cell_identification.py
+            # model = create_model()
+
+            # # 4. Run segmentation using your backend
+            # #    segment is defined in cell_identification.py
+            # masks, flows, styles = segment(model, imgs_clean_array)
+
+            # # 5. Extract ROIs for each color channel using your backend
+            # #    extract_ROI is defined in cell_identification.py
+            # red_ROIs = extract_ROI('red', masks)
+            # green_ROIs = extract_ROI('green', masks)
+            # blue_ROIs = extract_ROI('blue', masks)
+
+            # # 6. Count cells using your backend
+            # #    count is defined in cell_counting.py
+            # red_count = count(red_ROIs)
+            # green_count = count(green_ROIs)
+            # blue_count = count(blue_ROIs)
 
         st.subheader("Cell Counts")
-        st.write(f"**Red cells detected:** {red_count}")
-        st.write(f"**Green cells detected:** {green_count}")
-        st.write(f"**Blue cells detected:** {blue_count}")
+        # st.write(f"**Red cells detected:** {red_count}")
+        # st.write(f"**Green cells detected:** {green_count}")
+        # st.write(f"**Blue cells detected:** {blue_count}")
 
-        # (Optional) You can later add visualization of masks here if you want
+        st.write("Total cells detected: " + str(count(np.unique(masks))))
+        st.write("Red cells detected: " + str(all_counts["red"]))
+        st.write("Green cells detected: " + str(all_counts["green"]))
+        st.write("Blue cells detected: " + str(all_counts["blue"]))
+
+        
+        # If necessary, we can later add visualization of masks  
         # using imgs_clean_array, masks, and flows
