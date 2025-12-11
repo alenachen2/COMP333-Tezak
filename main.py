@@ -16,13 +16,16 @@ if __name__ == "__main__":
     img_path = get_file_path()
     img = cv2.imread(img_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    print("Processing image...")
+    
     b, g, r = split_channels(img)
 
     with yaspin(text="Identifying cells...", color="yellow") as spinner:
         model = create_model()
         #masks, flows, styles = segment(model, imgs_clean_array)
 
-        masks, flows, styles = model.eval(
+    print("Cell segmentation complete. Extracting color ROIs...")
+    masks, flows, styles = model.eval(
             img,
             flow_threshold=0.4,
             cellprob_threshold=0.0,
