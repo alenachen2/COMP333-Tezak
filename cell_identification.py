@@ -91,27 +91,6 @@ def create_model():
     return model
 
 
-<<<<<<< HEAD
-    def segment(model, image_array):
-        '''
-        Segments image.
-        Input: 
-            model: the Cellpose model that is being used to perform segmentation. 
-            image_array: an array of three images, the red, green, and blue channels, 
-                for segmentation 
-        Ouput:
-            masks: a list of arrays where each array corresponds to each image. 
-                Each array holds the labels corresponding to each ROI. 
-            flows: a list of flow fields used by the model to segment each image
-            styles: a list containing visual properties of each image. 
-        '''
-        masks, flows, styles = model.eval(
-            image_array,
-            flow_threshold=0.4,
-            cellprob_threshold=0.0,
-        )
-        return masks, flows, styles
-=======
 def segment(model, image_array):
     '''
     Segments image.
@@ -131,7 +110,6 @@ def segment(model, image_array):
         cellprob_threshold=2.5,
     )
     return masks, flows, styles
->>>>>>> b24ee3860cc9670f1e15fd1229fe50b0282f9d2c
 
 
 def extract_ROI(col, masks):
