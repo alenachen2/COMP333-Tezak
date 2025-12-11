@@ -8,6 +8,8 @@ from cellpose import plot
 from yaspin import yaspin
 from yaspin.spinners import Spinners
 
+#tezak_model = get_file_path()
+
 def classify_cells_by_color(img, masks):
     '''
     Classify already segmented cells based on color.
@@ -85,13 +87,13 @@ def create_model():
     '''
     Create a Cellpose model.
     Output:
-        model: model using Cellpose's pretrained model, cpsam
+        model: if using Cellpose's pretrained model, pretrained_model='cpsam'. If using our trained model, 
+        pretrained_model='tezak_model'
     '''
     model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
     return model
 
 
-<<<<<<< HEAD
     def segment(model, image_array):
         '''
         Segments image.
@@ -111,27 +113,6 @@ def create_model():
             cellprob_threshold=0.0,
         )
         return masks, flows, styles
-=======
-def segment(model, image_array):
-    '''
-    Segments image.
-    Input: 
-        model: the Cellpose model that is being used to perform segmentation. 
-        image_array: an array of three images, the red, green, and blue channels, 
-            for segmentation 
-    Ouput:
-        masks: a list of arrays where each array corresponds to each image. 
-            Each array holds the labels corresponding to each ROI. 
-        flows: a list of flow fields used by the model to segment each image
-        styles: a list containing visual properties of each image. 
-    '''
-    masks, flows, styles = model.eval(
-        image_array,
-        flow_threshold=0.4,
-        cellprob_threshold=2.5,
-    )
-    return masks, flows, styles
->>>>>>> b24ee3860cc9670f1e15fd1229fe50b0282f9d2c
 
 
 def extract_ROI(col, masks):
