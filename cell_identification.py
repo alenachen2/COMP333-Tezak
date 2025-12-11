@@ -136,11 +136,9 @@ def display_results(img_array, masks_array, flows_array):
     Displays the image with pre-processing changes and detected cells.
     The display interface is still in the works. 
     '''
-    for i in range(3):
-        color_labels = ['Red', 'Green', 'Blue']
-        fig = plt.figure(figsize=(12,5))
-        plot.show_segmentation(fig, img_array[i], masks_array[i], flows_array[i][0])
-        ax = plt.gca()                    
-        ax.set_title(color_labels[i] + " Channel Segmentation")
-        plt.tight_layout()
-        plt.show()
+    fig = plt.figure(figsize=(12,5))
+    plot.show_segmentation(fig, img_array, masks_array, flows_array[0])
+    ax = plt.gca()                    
+    ax.set_title("Detected Total Cells")
+    plt.tight_layout()
+    plt.show()
