@@ -12,24 +12,20 @@ from cell_counting import count
 
 
 def run_pipeline(img):
-    """
+    '''
     Run the same pipeline as main.py, but on an in-memory image
     instead of reading from a file.
-
-    Args:
+    Input:
         img: numpy array, RGB image (same as in main.py after cvtColor)
-
-    Returns:
+    Output:
         masks: 2D array of Cellpose labels
         flows: Cellpose flows (for visualization if needed)
         all_counts: dict with keys 'red', 'green', 'blue'
         total_cells: int, total number of cells detected
-    """
-    # This matches main.py logic
+    '''
 
-    # If you ever want to use these steps again:
     # b, g, r = split_channels(img)
-    # imgs_clean = clean(r, g, b)   # currently not used directly in main.py
+    # imgs_clean = clean(r, g, b)
 
     model = create_model()
 
