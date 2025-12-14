@@ -3,21 +3,27 @@ from tkinter import filedialog, ttk
 from PIL import Image, ImageTk
 import cv2
 import numpy as np
-
 from pipeline import run_pipeline
 
 
-# --------------------------------------------
-# Helper functions
-# --------------------------------------------
-
-def resize_for_display(img, max_w=600, max_h=500):
+def resize_for_display(img, max_w=600, max_h=450):
+    '''
+    Resizes the image input so that it fits in display.
+    '''
     h, w = img.shape[:2]
     scale = min(max_w / w, max_h / h)
     return cv2.resize(img, (int(w * scale), int(h * scale)))
 
 
 def create_overlay(img_rgb, masks):
+    '''
+    Creates an overlay image that highlights mask boundaries on an given image.
+    Input:
+        img_rgb: a RGB image formatted as a numpy.ndarray 
+        masks: a 2D array of size (height, width) that contains integer labels for all segmented regions
+    Output: 
+        The input img_rgb with masks boundaries highlighted.
+    '''
     overlay = img_rgb.copy()
     masks_i = masks.astype(np.int32)
     gy, gx = np.gradient(masks_i)
@@ -26,22 +32,15 @@ def create_overlay(img_rgb, masks):
     return overlay
 
 
-# --------------------------------------------
-# Root window
-# --------------------------------------------
-
+#Root window
 root = tk.Tk()
 root.title("Tezak Cell Counter")
-root.geometry("1400x900")
+root.geometry("1280x800")
 root.configure(bg="#151515")
 
-# --------------------------------------------
-# Styles
-# --------------------------------------------
-
+#styles
 style = ttk.Style()
 style.theme_use("clam")
-
 style.configure(
     "Primary.TButton",
     font=("Helvetica", 15, "bold"),
@@ -50,7 +49,6 @@ style.configure(
     padding=12,
 )
 style.map("Primary.TButton", background=[("active", "#4f46e5")])
-
 style.configure(
     "Nav.TButton",
     font=("Helvetica", 14, "bold"),
@@ -60,10 +58,7 @@ style.configure(
 )
 style.map("Nav.TButton", background=[("active", "#4b5563")])
 
-# --------------------------------------------
-# Title + Status
-# --------------------------------------------
-
+#title
 title = tk.Label(root, text="Tezak Cell Counter",
                  font=("Helvetica", 32, "bold"),
                  fg="white", bg="#151515")
@@ -75,10 +70,7 @@ status = tk.Label(root,
                   fg="#e5e7eb", bg="#151515")
 status.pack(pady=5)
 
-# --------------------------------------------
-# Image Display Area
-# --------------------------------------------
-
+#image display area
 image_frame = tk.Frame(root, bg="#151515")
 image_frame.pack(pady=10)
 
@@ -94,18 +86,12 @@ original_label.pack()
 segmented_label = tk.Label(right_frame, bg="#151515")
 segmented_label.pack()
 
-# --------------------------------------------
-# Counts
-# --------------------------------------------
-
+#counting 
 counts_label = tk.Label(
     root, text="", font=("Helvetica", 16),
     fg="#e5e7eb", bg="#151515", justify="center")
 counts_label.pack(pady=10)
 
-# --------------------------------------------
-# Global state
-# --------------------------------------------
 
 image_records = []
 current_index = -1
@@ -116,17 +102,20 @@ current_index = -1
 # --------------------------------------------
 
 def show_current_image():
+    '''
+    Displays image that was inputed into the program. Once the 
+    image is processed, both the original image and the segmentation 
+    overlay with masks appear.
+    '''
     global current_index
 
     rec = image_records[current_index]
 
-    # ORIGINAL
     disp = resize_for_display(rec["img"])
     disp_tk = ImageTk.PhotoImage(Image.fromarray(disp))
     original_label.config(image=disp_tk)
     original_label.image = disp_tk
 
-    # SEGMENTED
     if rec["masks"] is not None:
         overlay = create_overlay(rec["img"], rec["masks"])
         ov = resize_for_display(overlay)
@@ -137,7 +126,6 @@ def show_current_image():
         segmented_label.config(image="")
         segmented_label.image = None
 
-    # COUNTS
     filename = rec["path"].split("/")[-1]
     if rec["masks"] is not None:
         c = rec["counts"]
@@ -154,11 +142,10 @@ def show_current_image():
         )
 
 
-# --------------------------------------------
-# Processing logic
-# --------------------------------------------
-
 def upload_images():
+    '''
+    Allows the user to upload an image from their computer.
+    '''
     global image_records, current_index
 
     paths = filedialog.askopenfilenames(
@@ -182,6 +169,10 @@ def upload_images():
 
 
 def run_all():
+    '''
+    When given multiple images to process, go through all of them and do processing
+    on all images.
+    '''
     if not image_records:
         status.config(text="No images loaded.", fg="#f97373")
         return
@@ -213,14 +204,9 @@ def go_next():
         show_current_image()
 
 
-# --------------------------------------------
-# BUTTONS ADDED *AFTER* TK INITIALIZES (NO LAG)
-# --------------------------------------------
-
 def create_buttons_after_load():
     """
-    This runs AFTER the Tk event loop initializes.
-    This is the ONLY reliable way to eliminate button lag on macOS.
+    This runs after the Tk event loop initializes.
     """
     global upload_btn, run_btn, prev_btn, next_btn
 
@@ -251,11 +237,6 @@ def create_buttons_after_load():
     status.config(text="Ready!", fg="#4ade80")
 
 
-# Run this AFTER the first frame renders
 root.after(50, create_buttons_after_load)
-
-# --------------------------------------------
-# Main loop
-# --------------------------------------------
 
 root.mainloop()
