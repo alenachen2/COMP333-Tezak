@@ -18,5 +18,3 @@ def get_file_path():
         print(f"Error: Could not open or identify the image file '{image_path}'.")
 
     return image_path
-
-#img = Image.open(image_path)
