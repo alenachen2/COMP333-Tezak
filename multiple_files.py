@@ -3,6 +3,11 @@ import cv2
 import numpy as np
 
 def multiple_images():
+    '''
+    Allows user put in multiple file paths instead of just one. Store the file paths in a list.
+    Input: None
+    Output: array of images from the inputed file paths.
+    '''
     imgs_array = []
     all_paths = []
     while True:
