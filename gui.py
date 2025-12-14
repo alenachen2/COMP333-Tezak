@@ -6,10 +6,12 @@ import numpy as np
 from pipeline import run_pipeline
 
 
-def resize_for_display(img, max_w=600, max_h=450):
+def resize_for_display(img):
     '''
     Resizes the image input so that it fits in display.
     '''
+    max_w=600
+    max_h=500
     h, w = img.shape[:2]
     scale = min(max_w / w, max_h / h)
     return cv2.resize(img, (int(w * scale), int(h * scale)))
@@ -97,9 +99,6 @@ image_records = []
 current_index = -1
 
 
-# --------------------------------------------
-# Display logic
-# --------------------------------------------
 
 def show_current_image():
     '''
@@ -132,8 +131,8 @@ def show_current_image():
         counts_label.config(
             text=(
                 f"Image {current_index+1} of {len(image_records)} — {filename}\n\n"
-                f"Total: {rec['total']}\n"
-                f"🔴 {c['red']}    🟢 {c['green']}    🔵 {c['blue']}"
+                f"Total cells: {rec['total']}\n"
+                f"Red cells: {c['red']}    Green cells: {c['green']}    Blue cells: {c['blue']}"
             )
         )
     else:
@@ -206,33 +205,44 @@ def go_next():
 
 def create_buttons_after_load():
     """
-    This runs after the Tk event loop initializes.
+    Creates buttons after the Tk event loop initializes.
     """
     global upload_btn, run_btn, prev_btn, next_btn
 
     button_frame = tk.Frame(root, bg="#151515")
     button_frame.pack(pady=20)
 
-    upload_btn = ttk.Button(button_frame, text="Upload Images",
-                            style="Primary.TButton",
-                            command=upload_images)
-    upload_btn.grid(row=0, column=0, padx=20)
+    upload_btn = ttk.Button(
+        button_frame,
+        text="Upload Images",
+        style="Primary.TButton",
+        command=upload_images
+    )
+    upload_btn.grid(row=0, column=1, padx=15)
 
-    run_btn = ttk.Button(button_frame, text="Run Cell Counter",
-                         style="Primary.TButton",
-                         command=run_all)
-    run_btn.grid(row=0, column=1, padx=20)
+    run_btn = ttk.Button(
+        button_frame,
+        text="Run Cell Counter",
+        style="Primary.TButton",
+        command=run_all
+    )
+    run_btn.grid(row=0, column=2, padx=15)
 
-    nav_frame = tk.Frame(root, bg="#151515")
-    nav_frame.pack(pady=10)
-
-    prev_btn = ttk.Button(nav_frame, text="← Previous",
-                          style="Nav.TButton", command=go_prev)
+    prev_btn = ttk.Button(
+        button_frame,
+        text="← Previous",
+        style="Nav.TButton",
+        command=go_prev
+    )
     prev_btn.grid(row=0, column=0, padx=15)
 
-    next_btn = ttk.Button(nav_frame, text="Next →",
-                          style="Nav.TButton", command=go_next)
-    next_btn.grid(row=0, column=1, padx=15)
+    next_btn = ttk.Button(
+        button_frame,
+        text="Next →",
+        style="Nav.TButton",
+        command=go_next
+    )
+    next_btn.grid(row=0, column=3, padx=15)
 
     status.config(text="Ready!", fg="#4ade80")
 
