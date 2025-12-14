@@ -8,12 +8,11 @@ from cell_identification import create_model
 from cell_identification import classify_cells_by_color
 from cell_identification import display_results
 from cell_counting import count
+from multiple_files import multiple_images
 import numpy as np
 
 if __name__ == "__main__":
-    img_path = get_file_path()
-    img = cv2.imread(img_path)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img_array = multiple_images()
 
     print("Processing image...")
 
