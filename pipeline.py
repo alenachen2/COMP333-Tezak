@@ -2,8 +2,6 @@ import cv2
 import numpy as np
 
 from cell_identification import (
-    split_channels,
-    clean,
     create_model,
     classify_cells_by_color,
     display_results,   # not used in GUI but kept for parity
@@ -23,9 +21,6 @@ def run_pipeline(img):
         all_counts: dict with keys 'red', 'green', 'blue'
         total_cells: int, total number of cells detected
     '''
-
-    # b, g, r = split_channels(img)
-    # imgs_clean = clean(r, g, b)
 
     model = create_model()
 
