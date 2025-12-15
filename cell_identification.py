@@ -18,6 +18,7 @@ def classify_cells_by_color(img, masks):
         masks: a 2D array of size [height, width] containing cell labels.
     Output: a dictonary where the key is the amount cells of each color or color combination detected
     '''
+    # possible colors + combinations
     counts = {
         "red": 0,
         "green": 0,
@@ -27,6 +28,8 @@ def classify_cells_by_color(img, masks):
         "green+blue": 0,
         "red+green+blue": 0
     }
+
+    # absolute threshold for color presence, ratio threshold for color dominance
     abs_thresh = 50
     ratio_thresh = 0.8
 
@@ -43,9 +46,7 @@ def classify_cells_by_color(img, masks):
         g_present = mean_g >= abs_thresh and mean_g >= ratio_thresh * max_mean
         b_present = mean_b >= abs_thresh and mean_b >= ratio_thresh * max_mean
 
-        num_present = sum([r_present, g_present, b_present])
-
-        if num_present == 3:
+        if r_present and g_present and b_present:
             counts["red+green+blue"] += 1
         elif r_present and g_present:
             counts["red+green"] += 1
