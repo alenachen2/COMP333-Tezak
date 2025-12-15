@@ -35,53 +35,6 @@ def classify_cells_by_color(img, masks):
             counts["blue"] += 1
     return counts
 
-def split_channels(image):
-    '''
-    Separates the image into blue, green, and red channels.
-    Input: an image
-    Output: 
-        b: image with only the blue channel
-        g: image with only the green channel
-        r: image with only the red channel
-    '''
-    b, g, r = cv2.split(image)
-    return b, g, r
-
-
-def clean(r, g, b):
-    '''
-    Cleans up an image with an individual channel by suppressing the colors from the remaining
-    two channels. For instance, cleaning up a red channel involves suppressing the blue and green
-    bleed that may be leftover in the image.
-    Input: 
-        b: image with only the blue channel
-        g: image with only the green channel
-        r: image with only the red channel
-    Output: a list of the clean and normalized red, green, and blue channels
-    '''
-    red_clean = r.astype(np.int16) - (0.3 * b.astype(np.int16)) - (0.1 * g.astype(np.int16))
-    red_clean = np.clip(red_clean, 0, 255).astype(np.uint8)
-    
-    blue_clean = b.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * g.astype(np.int16))
-    blue_clean = np.clip(blue_clean, 0, 255).astype(np.uint8)
-    
-    green_clean = g.astype(np.int16) - (0.2 * r.astype(np.int16)) - (0.1 * b.astype(np.int16))
-    green_clean = np.clip(green_clean, 0, 255).astype(np.uint8)
-    
-    return [normalize(red_clean), normalize(green_clean), normalize(blue_clean)]
-
-
-def normalize(image):
-    '''
-    Normalizes the contrast in the image.
-    Input:
-        image: an image
-    Output:
-        normalized image 
-    '''
-    return cv2.normalize(image, None, 0, 255, cv2.NORM_MINMAX)
-
-
 
 def create_model():
     '''
