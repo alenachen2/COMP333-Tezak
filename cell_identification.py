@@ -16,8 +16,61 @@ def classify_cells_by_color(img, masks):
     Input:
         img: an image
         masks: a 2D array of size [height, width] containing cell labels.
-    Output: a dictonary where the key is the amount of each color cell detected
+    Output: a dictonary where the key is the amount cells of each color or color combination detected
     '''
+    counts = {
+        "red": 0,
+        "green": 0,
+        "blue": 0,
+        "red+green": 0,
+        "red+blue": 0,
+        "green+blue": 0,
+        "red+green+blue": 0
+    }
+    abs_thresh = 50
+    ratio_thresh = 0.8
+
+    for label in range(1, masks.max() + 1):
+        cell_pixels = img[masks == label]
+
+        mean_r = cell_pixels[:, 0].mean()
+        mean_g = cell_pixels[:, 1].mean()
+        mean_b = cell_pixels[:, 2].mean()
+
+        max_mean = max(mean_r, mean_g, mean_b)
+
+        r_present = mean_r >= abs_thresh and mean_r >= ratio_thresh * max_mean
+        g_present = mean_g >= abs_thresh and mean_g >= ratio_thresh * max_mean
+        b_present = mean_b >= abs_thresh and mean_b >= ratio_thresh * max_mean
+
+        num_present = sum([r_present, g_present, b_present])
+
+        if num_present == 3:
+            counts["red+green+blue"] += 1
+        elif r_present and g_present:
+            counts["red+green"] += 1
+        elif r_present and b_present:
+            counts["red+blue"] += 1
+        elif g_present and b_present:
+            counts["green+blue"] += 1
+        elif r_present:
+            counts["red"] += 1
+        elif g_present:
+            counts["green"] += 1
+        elif b_present:
+            counts["blue"] += 1
+        else:
+            # Fallback: assign dominant color
+            if mean_r == max_mean:
+                counts["red"] += 1
+            elif mean_g == max_mean:
+                counts["green"] += 1
+            else:
+                counts["blue"] += 1
+
+    return counts
+
+    """
     counts = {"red": 0, "green": 0, "blue": 0}
 
     for label in range(1, masks.max() + 1):
@@ -34,6 +87,7 @@ def classify_cells_by_color(img, masks):
         else:
             counts["blue"] += 1
     return counts
+"""
 
 
 def create_model():
@@ -43,7 +97,7 @@ def create_model():
         model: if using Cellpose's pretrained model, pretrained_model='cpsam'. If using our trained model, 
         pretrained_model='tezak_model'
     '''
-    model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
+    model = models.CellposeModel(pretrained_model='Tezak_cells',gpu=True)
     return model
 
 
