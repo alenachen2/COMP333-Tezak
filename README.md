@@ -6,7 +6,9 @@ schalla1201 - Saakshi Challa
 acurielwes - Allegra Curiel  
 
 ## User Instructions
-1. Download Python version 3.11._x_ if it is not already downloaded by following the instructions from this link: https://www.python.org/downloads/release/python-3119/. To check your Python version, type ```python --version``` into the terminal.   
+1. Download Python version 3.11._x_ if it is not already downloaded by going to this link: https://www.python.org/downloads/release/python-3119/. Scroll to the bottom to where it says "Files", and download the right version for your device. Make sure you download python itself and NOT the Python install manager. To check your Python version, type ```python --version``` into the terminal.
+   <img src = "assets/python_download.jpg">
+   Open up the installer and follow the directions until it's completed.     
 2. Clone our Github repository  
    - Open Terminal on your laptop and type: git clone https://github.com/alenachen2/COMP333-Tezak.git  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
@@ -20,7 +22,7 @@ acurielwes - Allegra Curiel
    ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```  
 5. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
    - Unzip the folder, and then add this model to the cellpose models folder.  
-      - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
+      - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just unzipped into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
       <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
 
       - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
