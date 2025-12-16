@@ -6,9 +6,10 @@ schalla1201 - Saakshi Challa
 acurielwes - Allegra Curiel  
 
 ## User Instructions
-1. Download Python version 3.11._x_ if it is not already downloaded by going to this link: https://www.python.org/downloads/release/python-3119/. Scroll to the bottom to where it says "Files", and download the right version for your device. Make sure you download python itself and NOT the Python install manager. To check your Python version, type ```python --version``` into the terminal.
+1. Download Python version 3.11._x_ if it is not already downloaded by going to this link: https://www.python.org/downloads/release/python-3119/. Scroll to the bottom to where it says "Files", and download the right version for your device. Make sure you download python itself and NOT the Python install manager.
+   - To check your Python version, type ```python --version``` into the terminal.
    <img src = "assets/python_download.jpg">
-   Open up the installer and MAKE SURE TO CHECK "add python.exe to PATH" if it's there. Then follow the rest of the directions until the installation is complete.    
+   - Open up the installer and MAKE SURE TO CHECK "add python.exe to PATH" if it's there. Then follow the rest of the directions until the installation is complete.    
 2. Clone our Github repository  
    - Open Terminal on your laptop and type: ```git clone https://github.com/alenachen2/COMP333-Tezak.git```  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
