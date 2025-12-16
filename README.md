@@ -26,12 +26,7 @@ acurielwes - Allegra Curiel
    ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```
 5. Run cellpose once to finish setting up. Do this by simply typing ```cellpose``` in the terminal, and wait for it to pop up. You can immediately close this out once launched.   
 6. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
-   - Unzip the folder, and then add this model to the cellpose models folder. 
-      - On a macOS, do this by opening Finder, going to your User folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just unzipped into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
-      <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
-
-      - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
-      - On a Linux computer, open File Manager and go to your Home directory. Press ```Ctrl + H```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
+   - Unzip the folder and then copy the filepath for "Tezak_cells". Then in terminal, type: ```cellpose --add_model <paste Tezak_cells path>``` without the <> brackets. 
 7. To use our user interface, run our code by typing ```python gui.py``` in the terminal. Make sure you're still inside the COMP333-Tezak folder (If you want to use the command line interface, follow the instructions in the next section.) A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
    - To run multiple images at once, select all images at once and upload them together. Use the "Next" and "Previous" buttons to toggle between images.
       - On a Mac, click on the Command button each time a new image is selected to be added.
