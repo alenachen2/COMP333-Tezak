@@ -8,7 +8,6 @@ from cellpose import plot
 from yaspin import yaspin
 from yaspin.spinners import Spinners
 
-tezak_model = "/Users/alenachen/Downloads/images/models/Tezak_cells"
 
 def classify_cells_by_color(img, masks):
     '''
@@ -43,7 +42,7 @@ def create_model():
         model: if using Cellpose's pretrained model, pretrained_model='cpsam'. If using our trained model, 
         pretrained_model='tezak_model'
     '''
-    model = models.CellposeModel(pretrained_model='cpsam',gpu=True)
+    model = models.CellposeModel(pretrained_model="Tezak_cells", gpu = True)
     return model
 
 
