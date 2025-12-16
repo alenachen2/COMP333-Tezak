@@ -33,7 +33,13 @@ if __name__ == "__main__":
         
         print("Cell segmentation complete. Extracting color ROIs...")
         print("Total cells detected: " + str(count(np.unique(masks))))
-        print("Red cells detected: " + str(all_counts["red"]))
-        print("Green cells detected: " + str(all_counts["green"]))
-        print("Blue cells detected: " + str(all_counts["blue"]))
+        print("Mostly red cells detected: " + str(all_counts["red"]))
+        print("Mostly green cells detected: " + str(all_counts["green"]))
+        print("Mostly blue cells detected: " + str(all_counts["blue"]))
+
+        print("Red + green cells detected: " + str(all_counts["red+green"]))
+        print("Red + blue cells detected: " + str(all_counts["red+blue"]))
+        print("Green + blue cells detected: " + str(all_counts["green+blue"]))
+        print("Red + green + blue cells detected: " + str(all_counts["red+green+blue"]))
+        
         display_results(img, masks, flows)

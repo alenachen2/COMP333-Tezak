@@ -20,9 +20,6 @@ def run_pipeline(img):
         total_cells: int, total number of cells detected
     '''
 
-    # b, g, r = split_channels(img)
-    # imgs_clean = clean(r, g, b)
-
     model = create_model()
 
     masks, flows, styles = model.eval(
