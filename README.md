@@ -10,8 +10,10 @@ acurielwes - Allegra Curiel
    - To check your Python version, type ```python --version``` into the terminal.
    <img src = "assets/python_download.jpg">
    - Open up the installer and MAKE SURE TO CHECK "add python.exe to PATH" if it's there. Then follow the rest of the directions until the installation is complete.    
-2. Clone our Github repository  
-   - Open Terminal on your laptop and type: ```git clone https://github.com/alenachen2/COMP333-Tezak.git```  
+2. Clone our Github repository
+   - To install Git, go to this link: ```https://git-scm.com/install/```. Once again install the correct version for your device. All of the default selections for setup should be fine. 
+   - Open Terminal on your laptop and type: ```git clone https://github.com/alenachen2/COMP333-Tezak.git```
+        - If you get an error about Git not being installed, try and restart your terminal and try again.  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
 3. Create a virtual environment for this project.   
    - Type ```python3.11 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
@@ -32,7 +34,7 @@ acurielwes - Allegra Curiel
    - To run multiple images at once, select all images at once and upload them together. Use the "Next" and "Previous" buttons to toggle between images.
       - On a Mac, click on the Command button each time a new image is selected to be added.
       - On a Windows computer, click on the Control (Ctrl) button each time a new image is selected to be added.
-7. To run our test code, type: ```pytest```. 
+8. To run our test code, type: ```pytest```. 
    - If you are unfamilar with pytest, here is documentation explaining how it works: https://docs.pytest.org/en/stable/.
 
 ### Using the command line interface 
