@@ -21,8 +21,7 @@ acurielwes - Allegra Curiel
 5. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
    - Add this model to the cellpose models folder.  
       - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
-      <img src="assets/mac_cellpose_models_folder.png" width="200" alt="Mac .Cellpose Folder"/>
-      ![Mac .Cellpose Folder](assets/mac_cellpose_models_folder.png)
+      <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
       - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
       - On a Linux computer, open File Manager and go to your Home directory. Press ```Ctrl + H```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
 6. Run our code by typing ```python gui.py```. A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
