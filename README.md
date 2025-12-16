@@ -22,17 +22,17 @@ acurielwes - Allegra Curiel
    - Add this model to the cellpose models folder.  
       - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder.  
       <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
-      
+
       - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
       - On a Linux computer, open File Manager and go to your Home directory. Press ```Ctrl + H```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
-6. Run our code by typing ```python gui.py```. A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
+6. To use our user interface, run our code by typing ```python gui.py``` in the terminal. (If you want to use the command line interface, follow the instructions in the next section.) A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
    - To run multiple images at once, select all images at once and upload them together. Use the "Next" and "Previous" buttons to toggle between images.
       - On a Mac, click on the Command button each time a new image is selected to be added.
       - On a Windows computer, click on the Control (Ctrl) button each time a new image is selected to be added.
 7. To run our test code, type: ```pytest```. 
    - If you are unfamilar with pytest, here is documentation explaining how it works: https://docs.pytest.org/en/stable/.
 
-## IF YOU WANT TO USE THE COMMAND LINE INTERFACE  
+### Using the command line interface 
 After step 4: 
 Run our code by typing ```python main.py```. Be advised that cell counting may take anywhere up to five minutes.  
    - When prompted to insert a file path, you may use your own cell image, or one of the cell images provided to us by the Tezak Lab. Since our code is tailored to work with specific cell images and still in the works, there is no guarantee of the cell count accuracy with other cell images.   
