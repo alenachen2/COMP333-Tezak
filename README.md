@@ -20,7 +20,7 @@ acurielwes - Allegra Curiel
    ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```  
 5. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
    - Unzip the folder, and then add this model to the cellpose models folder.  
-      - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder.  
+      - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
       <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
 
       - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
