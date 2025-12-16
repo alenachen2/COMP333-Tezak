@@ -2,8 +2,6 @@ import cv2
 from yaspin import yaspin
 from yaspin.spinners import Spinners
 from file_retrieval import get_file_path
-from cell_identification import split_channels
-from cell_identification import clean
 from cell_identification import create_model
 from cell_identification import classify_cells_by_color
 from cell_identification import display_results
