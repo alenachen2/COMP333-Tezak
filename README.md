@@ -16,21 +16,23 @@ acurielwes - Allegra Curiel
         - If you get an error about Git not being installed, try and restart your terminal and try again.  
    - Change directory into our repository's folder by locating where the repository was downloaded (likely in your Users folder), copy the path to the COMP333-Tezak, and then in terminal type: ```cd <paste path here>```.  
 3. Create a virtual environment for this project.   
-   - Type ```python3.11 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
-   - To activate the virtual environment on macOS/Linux, type ```source cellpose_env/bin/activate```. If you are using Windows, type ```cellpose_env\Scripts\activate```  
-4. Install required Python Packages.  
+   - For Mac/Linux type: ```python3.11 -m venv cellpose_env``` or for Windows type: ```py -3.11 -m venv cellpose_env```to create a virtual environment named cellpose_env.   
+   - To activate the virtual environment on macOS/Linux, type ```source cellpose_env/bin/activate```. If you are using Windows, type ```.\cellpose_env\Scripts\Activate.ps1```
+      - - If on Windows you get an error about running scripts not being enabled, type ```Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser``` and then try again   
+4. Install required Python Packages. Be aware this may take anywhere up to 10 min. 
    - In the terminal, type ```pip3 install opencv-python yaspin 'cellpose[gui] == 4.0.7' numpy matplotlib pytest```  
    - If this doesn't work, try   
    ```python -m pip install -U pip wheel setuptools```  
-   ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```  
-5. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
-   - Unzip the folder, and then add this model to the cellpose models folder.  
-      - On a macOS, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just unzipped into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
+   ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```
+5. Run cellpose once to finish setting up. Do this by simply typing ```cellpose``` in the terminal, and wait for it to pop up. You can immediately close this out once launched.   
+6. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
+   - Unzip the folder, and then add this model to the cellpose models folder. 
+      - On a macOS, do this by opening Finder, going to your User folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just unzipped into this models folder. (Don't worry if you don't have the rest of these models in the folder) 
       <img src="assets/mac_cellpose_models_folder.png" width="300" alt="Mac .Cellpose Folder"/>  
 
       - On a Windows computer, do this by opening File Explorer and going to your user folder. Click ```View``` (or ```View -> Show``` on Windows 11). Check Hidden items. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
       - On a Linux computer, open File Manager and go to your Home directory. Press ```Ctrl + H```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
-6. To use our user interface, run our code by typing ```python gui.py``` in the terminal. (If you want to use the command line interface, follow the instructions in the next section.) A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
+7. To use our user interface, run our code by typing ```python gui.py``` in the terminal. Make sure you're still inside the COMP333-Tezak folder (If you want to use the command line interface, follow the instructions in the next section.) A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
    - To run multiple images at once, select all images at once and upload them together. Use the "Next" and "Previous" buttons to toggle between images.
       - On a Mac, click on the Command button each time a new image is selected to be added.
       - On a Windows computer, click on the Control (Ctrl) button each time a new image is selected to be added.
