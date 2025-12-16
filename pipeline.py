@@ -1,13 +1,9 @@
 import cv2
 import numpy as np
 
-from cell_identification import (
-    split_channels,
-    clean,
-    create_model,
-    classify_cells_by_color,
-    display_results,   # not used in GUI but kept for parity
-)
+from cell_identification import create_model
+from cell_identification import classify_cells_by_color
+from cell_identification import display_results 
 from cell_counting import count
 
 
