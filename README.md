@@ -14,7 +14,7 @@ acurielwes - Allegra Curiel
    - To install Git, go to this link: ```https://git-scm.com/install/```. Once again install the correct version for your device. All of the default selections for setup should be fine. 
    - Open Terminal on your laptop and type: ```git clone https://github.com/alenachen2/COMP333-Tezak.git```
         - If you get an error about Git not being installed, try and restart your terminal and try again.  
-   - Change directory into our repository's folder by locating where the repository was downloaded (likely in your Users folder), copy the path to the folder, and then in terminal type: ```cd <paste path here>```.  
+   - Change directory into our repository's folder by locating where the repository was downloaded (likely in your Users folder), copy the path to the COMP333-Tezak, and then in terminal type: ```cd <paste path here>```.  
 3. Create a virtual environment for this project.   
    - Type ```python3.11 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
    - To activate the virtual environment on macOS/Linux, type ```source cellpose_env/bin/activate```. If you are using Windows, type ```cellpose_env\Scripts\activate```  
