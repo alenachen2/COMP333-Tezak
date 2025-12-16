@@ -6,7 +6,7 @@ schalla1201 - Saakshi Challa
 acurielwes - Allegra Curiel  
 
 ## User Instructions
-1. Download Python version 3.11._x_ if it is not already downloaded by following the instructions from this link: https://www.python.org/downloads/. To check your Python version, type ```python --version``` into the terminal.   
+1. Download Python version 3.11._x_ if it is not already downloaded by following the instructions from this link: https://www.python.org/downloads/release/python-3119/. To check your Python version, type ```python --version``` into the terminal.   
 2. Clone our Github repository  
    - Open Terminal on your laptop and type: git clone https://github.com/alenachen2/COMP333-Tezak.git  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
