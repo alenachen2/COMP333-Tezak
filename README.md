@@ -10,7 +10,7 @@ acurielwes - Allegra Curiel
    <img src = "assets/python_download.jpg">
    Open up the installer and follow the directions until it's completed.     
 2. Clone our Github repository  
-   - Open Terminal on your laptop and type: git clone https://github.com/alenachen2/COMP333-Tezak.git  
+   - Open Terminal on your laptop and type: ```git clone https://github.com/alenachen2/COMP333-Tezak.git```  
    - Change directory into our repository's folder by figuring out where the repository was downloaded and then typing: ```cd COMP333-Tezak```.  
 3. Create a virtual environment for this project.   
    - Type ```python3.11 -m venv cellpose_env``` to create a virtual environment named cellpose_env.  
