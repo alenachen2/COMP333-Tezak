@@ -16,9 +16,12 @@ acurielwes - Allegra Curiel
 4. Install required Python Packages.  
    - In the terminal, type ```pip3 install opencv-python yaspin 'cellpose[gui] == 4.0.7' numpy matplotlib pytest```  
    - If this doesn't work, try   
-   '''python -m pip install -U pip wheel setuptools'''  
-   '''python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"'''  
-
+   ```python -m pip install -U pip wheel setuptools```  
+   ```python -m pip install --only-binary=:all: "opencv-python-headless==4.10.0.84"```  
+5. Install the Tezak model by downloading this file to your computer: https://drive.google.com/drive/folders/1nwvbcopUyeYl0rTC6b3WTA5n06dgkSJR?usp=sharing
+   - Add this model to the cellpose models folder.  
+      - On a Mac, do this by opening Finder, going to your user folder, and pressing ```Cmd + Shift + .```. Look for the ```.cellpose``` folder. Within this, there should be a ```models``` folder. Move the Tezak file you just downloaded into this models folder. 
+      ![Mac .Cellpose Folder](mac_cellpose_models_folder.png)
 5. Run our code by typing ```python gui.py```. A pop-up screen should appear. Upload an image from your computer using the "Upload Images" button. When done uploading images, click the "Run Cell Counter" button. Be advised that cell counting may take anywhere up to five minutes per image.    
    - To run multiple images at once, select all images at once and upload them together. Use the "Next" and "Previous" buttons to toggle between images.
       - On a Mac, click on the Command button each time a new image is selected to be added.
