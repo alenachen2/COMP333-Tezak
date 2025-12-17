@@ -126,19 +126,26 @@ def show_current_image():
         segmented_label.image = None
 
     filename = rec["path"].split("/")[-1]
-    if rec["masks"] is not None:
+    if rec["masks"] is not None and rec["counts"] is not None:
         c = rec["counts"]
         counts_label.config(
             text=(
-                f"Image {current_index+1} of {len(image_records)} — {filename}\n\n"
-                f"Total cells: {rec['total']}\n"
-                f"Red cells: {c['red']}    Green cells: {c['green']}    Blue cells: {c['blue']}"
+            f"Image {current_index+1} of {len(image_records)} — {filename}\n\n"
+            f"Total cells: {rec['total']}\n\n"
+            f"Red: {c['red']}    Green: {c['green']}    Blue: {c['blue']}\n"
+            f"Red+Green: {c['red+green']}    "
+            f"Red+Blue: {c['red+blue']}    "
+            f"Green+Blue: {c['green+blue']}\n"
+            f"RGB (all): {c['red+green+blue']}"
             )
         )
     else:
         counts_label.config(
-            text=f"Image {current_index+1} of {len(image_records)} — {filename}\n(Not processed yet)"
+        text=(
+            f"Image {current_index+1} of {len(image_records)} — {filename}\n\n"
+            "(Not processed yet)"
         )
+ )
 
 
 def upload_images():
